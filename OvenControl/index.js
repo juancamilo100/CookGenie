@@ -12,6 +12,14 @@ greenBean.connect("range", function(range) {
     // range.upperOven.remoteEnable.write(1);
     // range.upperOven.cookMode.write({
     //     mode: 18,
+    //     cookTemperature: 450,
+    //     cookHours: 1,
+    //     cookMinutes: 0
+    // });
+
+    // range.upperOven.remoteEnable.write(1);
+    // range.upperOven.cookMode.write({
+    //     mode: 18,
     //     cookTemperature: 350,
     //     cookHours: 1,
     //     cookMinutes: 0
