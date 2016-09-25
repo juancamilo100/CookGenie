@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "green-bean": "^0.1.1"
+    "green-bean": "^0.1.1",
+    "serialport": "^4.0.1"
   }
 }
