@@ -1,0 +1,95 @@
+<!--
+/*
+ * Copyright (c) 2015 RF Digital Corp. All Rights Reserved.
+ *
+ * The source code contained in this file and all intellectual property embodied in
+ * or covering the source code is the property of RF Digital Corp. or its licensors.
+ * Your right to use this source code and intellectual property is non-transferable,
+ * non-sub licensable, revocable, and subject to terms and conditions of the
+ * SIMBLEE SOFTWARE LICENSE AGREEMENT.
+ * http://www.simblee.com/licenses/SimbleeSoftwareLicenseAgreement.txt
+ *
+ * THE SOURCE CODE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+ *
+ * This heading must NOT be removed from this file.
+ */
+-->
+
+<style>
+#led {
+  height: 100px;
+  width: 100px;
+  border: 1px black solid;
+}
+</style>
+
+<h2>ButtonFlash Page</h2>
+
+<div id=led>
+</div>
+
+<br>
+
+<div id=output>
+</div>
+
+<br>
+
+<script type="text/javascript" src="SimbleeCloud.js"></script>
+
+<script>
+// window.addEventListener("load", on_load, false);
+
+var led = document.getElementById("led");
+var output = document.getElementById("output");
+
+var cloud = new SimbleeCloud();
+
+cloud.myESN = 0x00000002;
+cloud.userID = 0x8c7b58ac;
+
+cloud.connect();
+
+cloud.onactive = function() {
+  output.innerHTML = "active";
+}
+
+cloud.oninactive = function() {
+  output.innerHTML = "inactive";
+}
+
+var start;
+var count;
+
+cloud.onrequest = function(originESN, payload) {
+    var view = new DataView(payload);
+
+    var data = String.fromCharCode(view.getUint8(0));
+    // console.log(data);
+
+    count++;
+    if (data == 'S')
+    {
+      start = new Date().getTime();
+      count = 1;
+    }
+    else if (data == 'E')
+    {
+      var end = new Date().getTime();
+
+      var elapse = end - start;
+
+      output.innerHTML = ""
+        + "count: " + count + "<br>"
+        + "elapse: " + (end - start) + "ms<br>"
+        + "avg: " + (elapse / count) + "ms<br>";
+    }
+    else
+    {
+      if (data == '1')
+        led.style.backgroundColor = "green";
+      else
+        led.style.backgroundColor = "white";
+    }
+}
+</script>

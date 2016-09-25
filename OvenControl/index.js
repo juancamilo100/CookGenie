@@ -24,4 +24,14 @@ greenBean.connect("range", function(range) {
     //     cookHours: 1,
     //     cookMinutes: 0
     // });
+
+    // range.upperOven.displayTimer.read(function(value) {
+    //     console.log("upper oven display timer is:", value);
+    // });
+    //
+    // range.upperOven.displayTimer.subscribe(function(value) {
+    //     console.log("upper oven display timer changed:", value);
+    // });
+    //
+    // range.upperOven.displayTimer.write(60);
 });
