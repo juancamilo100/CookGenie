@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Cook Genie</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/CookGenie.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="row">
+        <h3 id="recipeName" class="center-text"></h3>
+    </div>
+    <div class="row-fluid">
+        <div id="main" class="center-text">
+            Cook Genie
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore.min.js"></script>
+    <script src="js/socketIO.js"></script>
+    <script src="js/recipes.js"></script>
+    <script type="text/javascript">
+        var socket = io();
+        var recipeId = 0;
+        var recipeName = "";
+        var currentStep = ""
+
+        socket.on('displayStep', function(msg) {
+            // blinkTitle()
+            $('#main').html(msg.step);
+
+            // $('#messages').append($('<li>').text(msg));
+        });
+        socket.on('displayRecipe', function(msg) {
+            // blinkTitle()
+            recipeId = msg.index - 1;
+            recipeName = recipes[recipeId].name;
+            currentStep = recipes[recipeId].steps[0];
+            $('#recipeName').html(recipeName);
+            var listOfIngredients = $('<ul></ul>');
+            for (var i = 0; i < currentStep.length; i++) {
+                $(listOfIngredients).append($('<li>' + currentStep[i] + '</li>'));
+            }
+            $('#main').empty();
+            $('#main').append(listOfIngredients);
+            // $('#messages').append($('<li>').text(msg));
+        });
+        socket.on('disconect', function() {
+            console.log('desconectado');
+        });
+    </script>
+</body>
+
+</html>
