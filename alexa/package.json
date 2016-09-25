@@ -1,0 +1,19 @@
+{
+  "name": "cookgenie",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6",
+    "dynamodb": "^0.3.6",
+    "install": "^0.8.1",
+    "npm": "^3.10.8",
+    "particle-api-js": "^6.0.6",
+    "request": "^2.75.0"
+  }
+}
