@@ -40,7 +40,8 @@ var recipes = [
       "%%%%425",
       "Beat the eggs in a large bowl. Mix in the brown sugar, white sugar, salt, spices—cinnamon, ground ginger, nutmeg, ground cloves, cardamom, and lemon zest.",
       "Mix in the pumpkin purée. Stir in the cream. Beat together until everything is well mixed.",
-      "Bake at a high temperature of 425°F for 15 minutes. Then after 15 minutes, lower the temperature to 350°F."
+      "&&&&425;1",
+      "&&&&350;1"
     ]
   },
   {
@@ -57,6 +58,10 @@ var recipes = [
     ]
   }
 ];
+
+function getRecipeMaxNumberOfSteps(recipeIndex) {
+  return recipes[recipeIndex].steps.length;
+}
 
 var APP_ID = "amzn1.ask.skill.097eccf9-3a4d-4eb0-b821-f5d205823383";
 
@@ -152,16 +157,37 @@ ParticleSkill.prototype.intentHandlers = {
         var currentRecipeIndex = GetRecipeIndex(returnValue);
         var currentStepText = recipes[currentRecipeIndex].steps[currentStep];
 
-        // response.tell("Callback received with current step " + currentStep);
-        if(currentStepText.indexOf("%%%%") != -1) {
-          var ovenTemperature = currentStepText.replace("%%%%", "");
-          sendCommand("preheatOven;" + ovenTemperature, function(returnValue) {
-              response.tell("Preheating your oven at " + ovenTemperature + "degrees.  Tell me when you are ready for the next step.");
-          })
+        if(currentStep <= getRecipeMaxNumberOfSteps(currentRecipeIndex)) {
+          if(currentStepText.indexOf("%%%%") != -1) {
+            var ovenTemperature = currentStepText.replace("%%%%", "");
+            sendCommand("preheatOven;" + ovenTemperature, function(returnValue) {
+                response.tell("Preheating your oven at " + ovenTemperature + " degrees.  In the meantime, you can continue with the next step. " + recipes[currentRecipeIndex].steps[currentStep + 1]);
+            })
+          } else if(currentStepText.indexOf("&&&&") != -1) {
+            var ovenProfile = currentStepText.replace("&&&&", "");
+            var ovenTemperature = ovenProfile.trim().split(';')[0];
+            var cookTime = ovenProfile.trim().toLowerCase().split(';')[1];
+
+            sendCommand("ovenProfile;" + ovenProfile, function(returnValue) {
+              response.tell("Now, you oven will cook at " + ovenTemperature + " degrees for " + cookTime + " minutes. The timer alarm will let you know when cooking is done. Let me know when that happens");
+            });
+          }
+          else {
+            response.tell("Now, " + currentStepText + ". Tell me when you are ready with this step");
+          }
         }
         else {
-          response.tell("Now, " + currentStepText + ". Tell me when you are ready with this step");
+          response.tell("Congratulations, you are done with your recipe.  I hope you enjoy your meal");
         }
+      });
+    },
+    "RepeatInstruction": function (intent, session, response) {
+      sendCommand("repeat", function(returnValue){
+        var currentStep = GetRecipeStep(returnValue);
+        var currentRecipeIndex = GetRecipeIndex(returnValue);
+        var currentStepText = recipes[currentRecipeIndex].steps[currentStep];
+
+        response.tell("Of course.  the current step is as follows: " + currentStepText);
       });
     },
     "AMAZON.HelpIntent": function (intent, session, response) {
