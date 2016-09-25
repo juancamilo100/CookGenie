@@ -1,0 +1,68 @@
+<!--
+/*
+ * Copyright (c) 2015 RF Digital Corp. All Rights Reserved.
+ *
+ * The source code contained in this file and all intellectual property embodied in
+ * or covering the source code is the property of RF Digital Corp. or its licensors.
+ * Your right to use this source code and intellectual property is non-transferable,
+ * non-sub licensable, revocable, and subject to terms and conditions of the
+ * SIMBLEE SOFTWARE LICENSE AGREEMENT.
+ * http://www.simblee.com/licenses/SimbleeSoftwareLicenseAgreement.txt
+ *
+ * THE SOURCE CODE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+ *
+ * This heading must NOT be removed from this file.
+ */
+-->
+
+<h2>ButtonFlash Web</h2>
+
+<div id=output>
+</div>
+
+<br>
+
+<button id=flash>Flash</button>
+
+<script type="text/javascript" src="SimbleeCloud.js"></script>
+
+<script>
+// window.addEventListener("load", on_load, false);
+
+var output = document.getElementById("output");
+
+var cloud = new SimbleeCloud();
+
+cloud.myESN = 0x00000002;
+cloud.userID = 0x8c7b58ac;
+
+cloud.connect();
+
+cloud.onactive = function() {
+  output.innerHTML = "active";
+}
+
+cloud.oninactive = function() {
+  output.innerHTML = "inactive";
+}
+
+document.getElementById("flash").onclick = function() {
+  var payload = new ArrayBuffer(1);
+  var view = new DataView(payload);
+
+  view.setUint8(0, "S".charCodeAt(0));
+  cloud.send(cloud.myESN, payload);
+
+  for (var i = 1; i < 5; i++)
+  {
+    view.setUint8(0, "1".charCodeAt(0));
+    cloud.send(cloud.myESN, payload);
+
+    view.setUint8(0, "0".charCodeAt(0));
+    cloud.send(cloud.myESN, payload);
+  }
+
+  view.setUint8(0, "E".charCodeAt(0));
+  cloud.send(cloud.myESN, payload);
+}
+</script>
