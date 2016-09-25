@@ -128,12 +128,14 @@ port.on('data', function(data) {
       port.write(recipeIndex+''+currentStep);
   }else if(data.trim().toLowerCase()=="nextstep"){
 		currentStep+=1;
-      port.write(recipeIndex+''+currentStep);
+    port.write(recipeIndex+''+currentStep);
+    io.emit('nextstep', { step: currentStep, recipe: recipeIndex });
   }else if(data.trim().toLowerCase().indexOf("preheatoven")>-1){
 		 var temperature = data.trim().split(';')[1];
 		console.log('preheating: '+temperature);
 		currentStep+=1;
   	port.write(recipeIndex+''+currentStep);
+    io.emit('nextstep', { step: currentStep, recipe: recipeIndex });
 	 	sendCommandToOven(temperature, 0, 0);
   }else if(data.trim().toLowerCase().indexOf("ovenprofile")>-1){
 		 var temperature = data.trim().split(';')[1];
@@ -142,6 +144,7 @@ port.on('data', function(data) {
 		// currentStep+=1;
   	port.write(recipeIndex+''+currentStep);
 	 	sendCommandToOven(temperature, 0, minutes);
+    io.emit('showmessage', { title: "Cooking", message: "Cooking your food at "+temperature+" degrees." });
   }
 	else if(data.trim().toLowerCase()=="current"){
       port.write(recipeIndex+''+currentStep);
