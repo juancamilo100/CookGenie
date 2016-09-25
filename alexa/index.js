@@ -195,11 +195,11 @@ ParticleSkill.prototype.intentHandlers = {
       sendCommand("repeat", function(returnValue){
         var currentRecipeIndex = GetRecipeIndex(returnValue);
 
-        var ingredients = "Of course.  the current step is as follows: ";
-        for(var i = 0; i < recipes[recipeIndex].steps[0].length; i++)
+        var ingredientsText = "Here are the ingredients you need: ";
+        for(var i = 0; i < recipes[currentRecipeIndex].steps[0].length; i++)
         {
-          ingredients += recipes[recipeIndex].steps[0][i];
-          ingredients += ", ";
+          ingredientsText += recipes[currentRecipeIndex].steps[0][i];
+          ingredientsText += ". ";
         }
 
         response.tell(ingredientsText);
