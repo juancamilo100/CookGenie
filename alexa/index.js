@@ -40,20 +40,21 @@ var recipes = [
       "%%%%425",
       "Beat the eggs in a large bowl. Mix in the brown sugar, white sugar, salt, spices—cinnamon, ground ginger, nutmeg, ground cloves, cardamom, and lemon zest.",
       "Mix in the pumpkin purée. Stir in the cream. Beat together until everything is well mixed.",
-      "&&&&425;1",
-      "&&&&350;1"
+      "&&&&425;2",
+      "&&&&350;3"
     ]
   },
   {
     name: "beef brisket",
     steps: [
-      ["3 to 4 lbs of a brisket cut of beef",
+      ["3 to 4 pounds of a brisket cut of beef",
       "3/4 cup barbeque sauce",
       "1/4 cup soy sauce",
       "1 cup of water"],
-      "Preheat oven to 300ºF",
+      "%%%%300",
       "In a bowl, mix together the barbeque sauce, soy sauce, and water.",
-      "Place the brisket roast on a large piece of aluminum foil. Spread the BBQ sauce mixture generously over meat. Wrap the brisket in aluminum foil and place it in a roasting pan. Bake for 1 hour for every 1 pound of meat.",
+      "Place the brisket roast on a large piece of aluminum foil. Spread the BBQ sauce mixture generously over meat. Wrap the brisket in aluminum foil and place it in a roasting pan inside the oven.",
+      "&&&&300;60",
       "Remove from oven and let rest in the foil for 30 minutes before serving."
     ]
   }
@@ -97,8 +98,8 @@ ParticleSkill.prototype.eventHandlers.onSessionStarted = function (sessionStarte
 
 ParticleSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
     console.log("ParticleSkill onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
-    var speechOutput = "Welcome to the Particle Weather Station. You can ask me for the temperature or humidity.";
-    var repromptText = "You can ask me for the temperature or humidity";
+    var speechOutput = "Welcome to Cook Genie.  Im your recipe making assistant.  Which recipie would you like to cook today?";
+    var repromptText = "You can ask me what recipes I have available for you";
     response.ask(speechOutput, repromptText);
 };
 
@@ -188,6 +189,20 @@ ParticleSkill.prototype.intentHandlers = {
         var currentStepText = recipes[currentRecipeIndex].steps[currentStep];
 
         response.tell("Of course.  the current step is as follows: " + currentStepText);
+      });
+    },
+    "GetIngredients": function (intent, session, response) {
+      sendCommand("repeat", function(returnValue){
+        var currentRecipeIndex = GetRecipeIndex(returnValue);
+
+        var ingredients = "Of course.  the current step is as follows: ";
+        for(var i = 0; i < recipes[recipeIndex].steps[0].length; i++)
+        {
+          ingredients += recipes[recipeIndex].steps[0][i];
+          ingredients += ", ";
+        }
+
+        response.tell(ingredientsText);
       });
     },
     "AMAZON.HelpIntent": function (intent, session, response) {
