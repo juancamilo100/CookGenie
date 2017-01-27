@@ -98,7 +98,7 @@ var fork = require('child_process').fork;
 var io = require('socket.io')(server);
 
 
-var port = new serial('/dev/tty.usbmodem1421', {
+var port = new serial('/dev/tty.usbmodem1451', {
 	baudRate: 9600,
 	parser: serial.parsers.readline('\n')
 });
