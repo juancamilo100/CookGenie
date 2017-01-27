@@ -44,9 +44,9 @@ port.on('data', function(data) {
 		 var temperature = data.trim().split(';')[1];
 		 var minutes = data.trim().split(';')[2];
 		console.log('cooking temp: '+temperature+', cooking time:'+minutes);
-		currentStep+=1;
+		// currentStep+=1;
   	port.write(recipeIndex+''+currentStep);
-	 	sendCommandToOven(temperature, 0, 1);
+	 	sendCommandToOven(temperature, 0, minutes);
   }
 	else if(data.trim().toLowerCase()=="current"){
       port.write(recipeIndex+''+currentStep);

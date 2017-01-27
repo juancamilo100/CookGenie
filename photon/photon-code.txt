@@ -1,0 +1,45 @@
+// int led1 = D0;
+ int led2 = D7;
+int incomingByte =0;
+int alexaRequest(String command);
+
+void setup() {
+     pinMode(led2, OUTPUT);
+    Serial.begin(9600);
+    Particle.function("test",alexaRequest);
+    digitalWrite(led2, HIGH);
+    Serial.print("Init");
+}
+
+void loop() {
+//     Serial.println("Blinking");
+//     digitalWrite(led2, HIGH);
+
+//   // We'll leave it on for 1 second...
+//   delay(1000);
+
+//   // Then we'll turn it off...
+//   digitalWrite(led2, LOW);
+//   delay(1000);
+}
+
+int alexaRequest(String command) {
+
+    Serial.println(command);
+    // while (Serial.available() == 0) {
+    // }
+    incomingByte = Serial.read();
+    while(incomingByte == -1){
+        incomingByte = Serial.read();
+    }
+    int seconByte = Serial.read();
+    int x =(incomingByte-'0');
+    int y =(seconByte-'0');
+    int cowl = 10;
+    while(y >= cowl)
+        cowl *= 10;
+    int result =(x * cowl + y);
+    // Serial.println(result);
+    return result;
+
+}
