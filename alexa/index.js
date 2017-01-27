@@ -3,8 +3,6 @@ var Particle = require('particle-api-js');
 var AlexaSkill = require('./AlexaSkill');
 // var recipes = require('./recipes');
 var particle = new Particle();
-var ddb = require('dynamodb').ddb({ accessKeyId: 'AKIAJF4Y2SEMKVVQYCWQ',
-                                    secretAccessKey: '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' });
 
 function parseData(number, element) {
   var output = [];
@@ -149,7 +147,7 @@ ParticleSkill.prototype.intentHandlers = {
       recipeIndex += 1;
       // response.tell("Let's start making " + chosenRecipe + ". " + "The ingredients you need are :" + ingredients + ". Tell me when you are ready to continue.");
       sendCommand("startRecipe;" + recipeIndex, function(returnValue){
-          response.tell("Let's start making " + chosenRecipe + ". " + "The ingredients you need are :" + ingredients + ". Tell me when you are ready to continue.");
+          response.tell("Let's start making " + chosenRecipe + ". " + "The ingredients you need are :" + ingredients + ". You can use the Simblee scale to measure portions. Tell me when you are ready to continue.");
       });
     },
     "NextStep": function (intent, session, response) {
@@ -208,7 +206,11 @@ ParticleSkill.prototype.intentHandlers = {
     "AMAZON.HelpIntent": function (intent, session, response) {
         var speechOutput = "You can ask me for the temperature or humidity";
         response.ask(speechOutput);
-    }
+    },
+    "AMAZON.CancelIntent": function(intent, session, response) {
+        var speechOutput = "Thanks for using Cook Genie.  See you at your next meal!";
+        response.tell(speechOutput);
+    },
 };
 
 exports.handler = function (event, context) {

@@ -28,6 +28,7 @@
             }
 
             h3 {
+                visibility: hidden;
                 font-family: Helvetica, Verdana, sans-serif;
                 color: #2a2a2a;
             }
@@ -38,6 +39,14 @@
 
             span.disconnected {
                 color: red;
+            }
+
+            span.mymsg {
+                color: red;
+            }
+
+            span.mymsg1 {
+                color: green;
             }
 
             img {
@@ -80,20 +89,24 @@
     </head>
     <body>
         <div id="dialog">
-            <h1>Light Cloud Demo</h1>
+            <h1>Cook Genie Interactive Scale</h1>
+            <h2>Interactive Scale</h2>
             <h3>Cloud Status: <span id="cloud_status" class="disconnected">Disconnected</span></h3>
-            <h3>Light Status: <span id="lamp_status" class="disconnected">Disconnected</span></h3>
-            <img id="light" src="light_off.png" />
+            <h3>Scale Status: <span id="lamp_status" class="disconnected">Disconnected</span></h3>
+            <h2> <span id="themsg" class="mymsg">Add some more</span></h2>
+            <!-- <img id="light" src="light_off.png" /> -->
             <br>
-            <div id="button">
+            <br>
+            <!-- <div id="button">
                 <span id="button_text">Turn On</span>
-            </div>
+            </div> -->
         </div>
         <script type="text/javascript" src="SimbleeCloud.js"></script>
         <script type="text/javascript">
             var cloudStatus = document.getElementById("cloud_status");
             var lightStatus = document.getElementById("lamp_status");
             var lightImage = document.getElementById("light");
+            var message = document.getElementById("themsg");
             var button = document.getElementById("button");
             var buttonText = document.getElementById("button_text");
             var cloud = new SimbleeCloud();
@@ -110,7 +123,7 @@
             setInterval(function() {
                 var payload = new ArrayBuffer(1);
                 var view = new DataView(payload);
-                view.setUint8(0, "2".charCodeAt(0));
+                view.setUint8(0, "3".charCodeAt(0));
                 cloud.send(destESN, payload);
             }, 1000);
 
@@ -119,7 +132,7 @@
                 cloudStatus.innerHTML = "Connected";
                 var payload = new ArrayBuffer(1);
                 var view = new DataView(payload);
-                view.setUint8(0, "2".charCodeAt(0));
+                view.setUint8(0, "3".charCodeAt(0));
                 cloud.send(destESN, payload);
             };
 
@@ -140,13 +153,25 @@
                 lightStatus.innerHTML = "Connected";
 
                 if (data == '1') {
-                    lightImage.src = "light_on.png";
-                    buttonText.className = 'on';
-                    buttonText.innerHTML = "Turn Off";
-                } else if (data == '0') {
-                    lightImage.src = "light_off.png";
-                    buttonText.className = '';
-                    buttonText.innerHTML = "Turn On";
+                    // lightImage.src = "light_on.png";
+                    // buttonText.className = 'on';
+                    // buttonText.innerHTML = "Turn Off";
+                    themsg.className ='mymsg1';
+                    themsg.innerHTML = "That's Good"
+                }
+                else if (data == '2') {
+                    // lightImage.src = "light_on.png";
+                    // buttonText.className = 'on';
+                    // buttonText.innerHTML = "Turn Off";
+                    themsg.className ='mymsg';
+                    themsg.innerHTML = "TOO MUCH"
+                }
+                 else if (data == '0') {
+                    // lightImage.src = "light_off.png";
+                    // buttonText.className = '';
+                    // buttonText.innerHTML = "Turn On";
+                    themsg.className ='mymsg';
+                    themsg.innerHTML = "Add some more"
                 }
             };
 
