@@ -62,10 +62,10 @@ function getRecipeMaxNumberOfSteps(recipeIndex) {
   return recipes[recipeIndex].steps.length;
 }
 
-var APP_ID = "amzn1.ask.skill.097eccf9-3a4d-4eb0-b821-f5d205823383";
+var APP_ID = "";
 
-var PARTICLE_DEVICE_ID = "43002a001147353138383138";
-var PARTICLE_ACCESS_TOKEN = "1e9fc84b85e5c16bbb3669a18f010cba3929925e";
+var PARTICLE_DEVICE_ID = "";
+var PARTICLE_ACCESS_TOKEN = "";
 
 var ParticleSkill = function () {
     AlexaSkill.call(this, APP_ID);
